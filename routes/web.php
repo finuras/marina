@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProcessController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/admin');
+
+
+Route::get('/processes', [ProcessController::class, 'index'])->name('processes.index');
+Route::get('/processes/mock', [ProcessController::class, 'mock'])->name('processes.mock');
+Route::get('/processes/sse', [ProcessController::class, 'sse'])->name('processes.sse');
