@@ -32,6 +32,15 @@ RUN apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# DOCKER-OUTSIDE-OF-DOCKER
+RUN apt-get update
+RUN apt-get install -y ca-certificates curl gnupg lsb-release
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --batch --yes --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update
+RUN apt-get -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
 # USER
 RUN groupadd --force -g 1000 sail
 RUN useradd -ms /bin/bash --no-user-group -g 1000 -u 1000 sail
