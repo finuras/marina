@@ -28,7 +28,7 @@ RUN apt-get update \
     && apt-get install -y nodejs
 
 # DOCKER-OUTSIDE-OF-DOCKER
-RUN apt-get install -y ca-certificates curl gnupg lsb-release
+RUN apt-get install -y gnupg lsb-release sudo
 RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --batch --yes --dearmor -o /etc/apt/keyrings/docker.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -43,8 +43,8 @@ RUN apt-get -y autoremove \
 # USER
 RUN groupadd --force -g 1000 sail
 RUN useradd -ms /bin/bash --no-user-group -g 1000 -u 1000 sail
-RUN usermod -aG sudo sail
-RUN usermod -aG sail www-data
+RUN echo 'sail ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 RUN chown -R sail:sail /var/www
 COPY --chown=sail:sail . /var/www/html
 

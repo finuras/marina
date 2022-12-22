@@ -9,7 +9,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
+use Symfony\Component\Process\Process;
 
 class ExecuteProcess implements ShouldQueue
 {
@@ -31,13 +35,32 @@ class ExecuteProcess implements ShouldQueue
      */
     public function handle()
     {
-        collect(range(1,50))->each(function() {
-            $quote = Inspiring::quote();
-            ray($quote);
-            $this->activity->description .= '[' . now()->format('Y-m-d H:i:s') . '] ' . $quote;
-            $this->activity->save();
+//        collect(range(1,50))->each(function() {
+//            $quote = Inspiring::quote();
+//            ray($quote);
+//            $this->activity->description .= '[' . now()->format('Y-m-d H:i:s') . '] ' . $quote;
+//            $this->activity->save();
+//
+//            usleep(500_000);
+//        });
 
-            usleep(500_000);
+//        $command = ['ls', '-lsa'];
+        $command = ['sudo', 'docker', 'ps'];
+//        $command = ['curl','--unix-socket','/var/run/docker.sock','http://127.0.0.1/version'];
+
+        $process = new Process($command);
+
+        $name = Str::uuid();
+
+        $process->run(function ($type, $buffer) use ($name) {
+            if (Process::ERR === $type) {
+                Storage::append($name.'.log', 'ERR > '.$buffer);
+            } else {
+                Storage::append($name.'.log', 'OUT > '.$buffer);
+            }
+            ray($buffer);
+            $this->activity->description .= $buffer;
+            $this->activity->save();
         });
 
         $this->activity->description .= "\n\n Finished.";

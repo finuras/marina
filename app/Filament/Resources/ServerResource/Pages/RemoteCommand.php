@@ -16,11 +16,11 @@ class RemoteCommand extends Page
 
     public $isKeepAliveOn = false;
 
+    public $manualKeepAlive = false;
+
     public function mount()
     {
-//        $this->searchForId = 21;
-//        $this->polling();
-//        ray($this->activity);
+        //
     }
 
     public function runCommand()
@@ -29,7 +29,7 @@ class RemoteCommand extends Page
 
         $this->activity = activity()
             ->withProperty('status', 'running')
-            ->log('Running command');
+            ->log("Running command...\n\n");
 
         $this->isKeepAliveOn = true;
 
@@ -38,9 +38,9 @@ class RemoteCommand extends Page
 
     public function polling()
     {
-        $this->activity->refresh();
+        $this->activity?->refresh();
 
-        if ($this->activity->properties['status'] === 'finished') {
+        if ($this->activity?->properties['status'] === 'finished') {
             $this->isKeepAliveOn = false;
         }
     }

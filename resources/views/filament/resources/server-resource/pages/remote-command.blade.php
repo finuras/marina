@@ -21,10 +21,15 @@
             flex-direction: column-reverse;
         "
         placeholder="Build output"
-        @if($isKeepAliveOn) wire:poll.1500ms="polling" @endif
+        @if($isKeepAliveOn || $manualKeepAlive) wire:poll.750ms="polling" @endif
     >
         {{ data_get($activity, 'description') }}
     </pre>
 
-    @if($isKeepAliveOn) Polling... @endif
+    <div>
+        <input id="manualKeepAlive" name="manualKeepAlive" type="checkbox" wire:model="manualKeepAlive">
+        <label for="manualKeepAlive"> Live content </label>
+    </div>
+
+    @if($isKeepAliveOn || $manualKeepAlive) Polling... @endif
 </x-filament::page>
