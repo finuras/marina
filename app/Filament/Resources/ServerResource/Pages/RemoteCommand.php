@@ -5,7 +5,6 @@ namespace App\Filament\Resources\ServerResource\Pages;
 use App\Filament\Resources\ServerResource;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\Models\Activity;
 
 class RemoteCommand extends Page
 {
@@ -13,11 +12,9 @@ class RemoteCommand extends Page
 
     protected static string $view = 'filament.resources.server-resource.pages.remote-command';
 
-    public $searchForId;
-
     public $activity;
 
-    public $isKeepAliveOn = true;
+    public $isKeepAliveOn = false;
 
     public function mount()
     {
@@ -26,12 +23,25 @@ class RemoteCommand extends Page
 //        ray($this->activity);
     }
 
+    public function runCommand()
+    {
+        ray()->clearAll();
+
+        $this->activity = activity()
+            ->withProperty('status', 'running')
+            ->log('Running command');
+
+        $this->isKeepAliveOn = true;
+
+        dispatch(new \App\Jobs\ExecuteProcess($this->activity));
+    }
+
     public function polling()
     {
-//        $this->activity = Activity::query()->find($this->searchForId);
-//
-//        if (Str::contains($this->activity->description, 'Finished')) {
-//            $this->isKeepAliveOn = false;
-//        }
+        $this->activity->refresh();
+
+        if ($this->activity->properties['status'] === 'finished') {
+            $this->isKeepAliveOn = false;
+        }
     }
 }
