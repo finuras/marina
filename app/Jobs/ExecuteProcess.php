@@ -25,7 +25,8 @@ class ExecuteProcess implements ShouldQueue
      * @return void
      */
     public function __construct(
-        public Activity $activity
+        public Activity $activity,
+        public string $command = 'php artisan inspire',
     ){}
 
     /**
@@ -35,33 +36,28 @@ class ExecuteProcess implements ShouldQueue
      */
     public function handle()
     {
-//        collect(range(1,50))->each(function() {
-//            $quote = Inspiring::quote();
-//            ray($quote);
-//            $this->activity->description .= '[' . now()->format('Y-m-d H:i:s') . '] ' . $quote;
+//        $name = Str::uuid();
+//        $command = ['ls', '-lsa'];
+//        $command = ['sudo', 'docker', 'ps'];
+//        $command = ['curl','--unix-socket','/var/run/docker.sock','http://127.0.0.1/version'];
+//        $process = new Process($command);
+//        $process->run(function ($type, $buffer) use ($name) {
+//            if (Process::ERR === $type) {
+//                Storage::append($name.'.log', 'ERR > '.$buffer);
+//            } else {
+//                Storage::append($name.'.log', 'OUT > '.$buffer);
+//            }
+//            ray($buffer);
+//            $this->activity->description .= $buffer;
 //            $this->activity->save();
-//
-//            usleep(500_000);
 //        });
 
-//        $command = ['ls', '-lsa'];
-        $command = ['sudo', 'docker', 'ps'];
-//        $command = ['curl','--unix-socket','/var/run/docker.sock','http://127.0.0.1/version'];
-
-        $process = new Process($command);
-
-        $name = Str::uuid();
-
-        $process->run(function ($type, $buffer) use ($name) {
-            if (Process::ERR === $type) {
-                Storage::append($name.'.log', 'ERR > '.$buffer);
-            } else {
-                Storage::append($name.'.log', 'OUT > '.$buffer);
-            }
-            ray($buffer);
-            $this->activity->description .= $buffer;
-            $this->activity->save();
-        });
+        Process::fromShellCommandline($this->command, null, null, null, 60)
+            ->setTimeout(300)
+            ->run(function ($type, $buffer) {
+                $this->activity->description .= '[' . now()->format('Y-m-d H:i:s') . '] ' . $buffer;
+                $this->activity->save();
+            });
 
         $this->activity->description .= "\n\n Finished.";
         $this->activity->properties = $this->activity->properties->merge(['status' => 'finished']);
