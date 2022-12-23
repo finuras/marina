@@ -1,4 +1,8 @@
-# Server Ninja
+## Marina
+Manage your containers with ease.
+
+
+### Notes to self:
 
 - In the filament admin panel, there is a Server resource
   - It has a manage page. Inside, we want to run a long running process and see the output in real time (or similar).
