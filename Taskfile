@@ -19,7 +19,11 @@ function default {
 }
 
 function build {
-    docker build -t "finuras/marina" .
+    docker compose build marina
+}
+
+function push {
+    docker compose push marina
 }
 
 TIMEFORMAT="Task completed in %3lR"

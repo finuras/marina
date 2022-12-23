@@ -1,0 +1,10 @@
+version: '3'
+services:
+  marina:
+    image: finuras/marina
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '~/apps:/var/www/html/storage/app/marina'
+networks:
+  sail:
+    driver: bridge
