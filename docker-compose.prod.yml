@@ -5,6 +5,12 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - '~/apps:/var/www/html/storage/app/marina'
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.marina.entrypoints=https
+      - traefik.http.services.marina.loadbalancer.server.port=80
+      - traefik.http.routers.marina.rule=Host(`${TRAEFIK_HOST}`)
+      - traefik.http.routers.marina.tls.certresolver=leresolver
 networks:
   sail:
     driver: bridge
