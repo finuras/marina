@@ -4,7 +4,8 @@
         <div>Activity</div>
         <div>{{ $activity?->id }}</div>
 
-        <button class="bg-blue-500" wire:click="runCommand">
+        <input wire:model="command" type="text" />
+        <button class="btn" wire:click="runCommand">
             Run command
         </button>
     </div>
@@ -13,7 +14,7 @@
 
     <pre
         style="
-            background-color: #BADA55;
+            background-color: #FFFFFF;
             width: 1200px;
             height: 600px;
             overflow-y: scroll;

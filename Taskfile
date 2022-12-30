@@ -19,11 +19,11 @@ function default {
 }
 
 function build {
-    docker compose build marina
+    docker compose -f docker-compose.prod.yml build marina
 }
 
 function push {
-    docker compose push marina
+    docker compose -f docker-compose.prod.yml push marina
 }
 
 TIMEFORMAT="Task completed in %3lR"

@@ -18,6 +18,8 @@ class RemoteCommand extends Page
 
     public $manualKeepAlive = false;
 
+    public $command = '';
+
     public function mount()
     {
         //
@@ -33,7 +35,7 @@ class RemoteCommand extends Page
 
         $this->isKeepAliveOn = true;
 
-        dispatch(new \App\Jobs\ExecuteProcess($this->activity));
+        dispatch(new \App\Jobs\ExecuteProcess($this->activity, $this->command));
     }
 
     public function polling()

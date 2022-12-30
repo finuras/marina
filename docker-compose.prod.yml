@@ -1,6 +1,9 @@
 version: '3'
 services:
   marina:
+    build:
+      context: .
+      dockerfile: ./docker/production/Dockerfile
     image: finuras/marina
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
