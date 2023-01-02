@@ -36,7 +36,10 @@ class ManageProject extends Page
 
     protected function loadComposeContent()
     {
-        // get the contents of the compose file
+        if (! File::exists(storage_path('app/marina/' . $this->projectFolder . '/docker-compose.yml'))) {
+            return;
+        }
+
         $this->composeContent = File::get(
             storage_path('app/marina/' . $this->projectFolder . '/docker-compose.yml')
         );

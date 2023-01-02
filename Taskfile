@@ -26,5 +26,9 @@ function push {
     docker compose -f docker-compose.prod.yml push marina
 }
 
+function deploy {
+    docker buildx build -t finuras/marina:latest --platform linux/amd64 --push
+}
+
 TIMEFORMAT="Task completed in %3lR"
 time "${@:-default}"
