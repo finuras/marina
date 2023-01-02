@@ -24,6 +24,8 @@ class ManageProject extends Page
 
     public $isFolderCreated;
 
+    public $projectFolder;
+
     public function mount($record)
     {
         $this->record = $record;
@@ -36,20 +38,20 @@ class ManageProject extends Page
     {
         // get the contents of the compose file
         $this->composeContent = File::get(
-            storage_path('app/marina/' . $this->project->name . '/docker-compose.yml')
+            storage_path('app/marina/' . $this->projectFolder . '/docker-compose.yml')
         );
-
     }
 
     protected function loadProject()
     {
         $this->project = Project::query()->find($this->record);
+        $this->projectFolder = $this->project->name;
     }
 
     protected function bootFolderCreated()
     {
         $this->isFolderCreated = File::isDirectory(
-            storage_path('app/marina/' . $this->project->name)
+            storage_path('app/marina/' . $this->projectFolder)
         );
     }
 
@@ -58,7 +60,7 @@ class ManageProject extends Page
         $this->loadProject();
 
         File::ensureDirectoryExists(
-            storage_path('app/marina/' . $this->project->name)
+            storage_path('app/marina/' . $this->projectFolder)
         );
 
         $this->isFolderCreated = true;
@@ -69,7 +71,7 @@ class ManageProject extends Page
         $this->loadProject();
 
         File::deleteDirectory(
-            storage_path('app/marina/' . $this->project->name)
+            storage_path('app/marina/' . $this->projectFolder)
         );
         $this->isFolderCreated = false;
     }
@@ -83,7 +85,7 @@ class ManageProject extends Page
         ]);
 
         $result = File::put(
-            storage_path('app/marina/' . $this->project->name . '/docker-compose.yml'),
+            storage_path('app/marina/' . $this->projectFolder . '/docker-compose.yml'),
             $this->composeContent
         );
 

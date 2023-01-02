@@ -27,6 +27,7 @@ class ExecuteProcess implements ShouldQueue
     public function __construct(
         public Activity $activity,
         public string $command = 'php artisan inspire',
+        public ?string $cwd = null,
     ){}
 
     /**
@@ -52,7 +53,7 @@ class ExecuteProcess implements ShouldQueue
 //            $this->activity->save();
 //        });
 
-        Process::fromShellCommandline($this->command, null, null, null, 60)
+        Process::fromShellCommandline($this->command, $this->cwd, null, null, 60)
             ->setTimeout(300)
             ->run(function ($type, $buffer) {
                 $this->activity->description .= '[' . now()->format('Y-m-d H:i:s') . '] ' . $buffer;

@@ -24,4 +24,8 @@
         </div>
         <x-filament::button wire:click="saveComposeFile"> Save docker-compose </x-filament::button>
     </x-filament::card>
+
+    <x-filament::card>
+        <livewire:run-command :cwd="storage_path('app/marina/'.$projectFolder)"></livewire:run-command>
+    </x-filament::card>
 </x-filament::page>
