@@ -1,6 +1,10 @@
 ## Marina
 Manage your containers with ease.
 
+### Project development overview
+Visit [Todos](./todos.md) for a list of things to do.
+
+
 ### Useful links
 ```bash
 https://glances.readthedocs.io/en/latest/index.html
