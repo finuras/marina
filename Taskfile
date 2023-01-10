@@ -27,7 +27,11 @@ function push {
 }
 
 function deploy {
-    docker buildx build -t finuras/marina:latest --platform linux/amd64 --push
+    docker buildx build \
+        -f ./docker/production/Dockerfile \
+        -t finuras/marina:latest \
+        --platform linux/amd64 \
+        --push .
 }
 
 TIMEFORMAT="Task completed in %3lR"
