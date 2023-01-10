@@ -15,7 +15,7 @@
       - Is Compose a plugin `docker-compose` or `docker compose`? Or just based on Docker version?
 
 ### Global settings
-  - [ ] Define the `Marina` folder - default should be `~/projets`
+  - [ ] Define the `Marina` folder - default should be `~/projects`
 
 ### Projects
 - [ ] Create a new project
