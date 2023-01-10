@@ -18,6 +18,8 @@ docker run \
     -v ~/apps:/var/www/html/storage/app/marina \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -p 8000:80 \
+    --pull=always \
+    --rm \
     finuras/marina
 ```
 
